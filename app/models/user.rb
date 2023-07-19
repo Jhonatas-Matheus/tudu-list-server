@@ -42,6 +42,9 @@ class User
   ## Tokens
   field :tokens, type: Hash, default: {}
 
+  ## Firebase
+  field :firebaseId, type: String
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -53,4 +56,7 @@ class User
   index({ confirmation_token: 1 }, { name: 'confirmation_token_index', unique: true, sparse: true, background: true })
   index({ uid: 1, provider: 1}, { name: 'uid_provider_index', unique: true, background: true })
   # index({ unlock_token: 1 }, { name: 'unlock_token_index', unique: true, sparse: true, background: true })
+  has_and_belongs_to_many :tasks
+  has_many :comments
+  accepts_nested_attributes_for :comments
 end
