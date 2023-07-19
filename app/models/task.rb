@@ -6,6 +6,7 @@ class Task
   field :description, type: String
   field :deadline, type: Date
   field :status, type: Integer
+  field :owner, type: String
 
   has_and_belongs_to_many :users
   has_many :comments
