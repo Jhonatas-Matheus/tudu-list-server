@@ -66,7 +66,16 @@ class TaskController < ApplicationController
             render json: {message: "User is not associated with the task"}, status: :not_found
         end
     end
-
+    def showAllTAskOfUser
+        tasks = Task.where(user_ids: current_user.id.to_s.strip)
+        tasks_with_members = tasks.map! do |current_task|
+            task = current_task.attributes
+            task[:members] = handleUserRelation(current_task.user_ids)
+            task.delete("user_ids")
+            task
+        end
+        render json: tasks_with_members, status: :ok
+    end
     def showSpecificTask
         begin
             task = Task.find(params[:task_id])
@@ -87,7 +96,7 @@ class TaskController < ApplicationController
         users = []
         usersArray.each do |user_id|
             user = User.find(user_id)
-            userInfo = {email: user.email, id: user.id}
+            userInfo = {email: user.email, id: user._id}
             users << userInfo
         return users
         end
